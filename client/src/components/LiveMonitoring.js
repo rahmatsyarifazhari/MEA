@@ -259,24 +259,6 @@ const LiveMonitoring = ({ setPage }) => {
             <div className="col-5">
               <label>{"Deviasi " + notification.type_object}</label>
             </div>
-            <div className="col-7 d-flex justify-content-end">
-              <label
-                className={
-                  "px-2 rounded-2" +
-                  (notification.type_validation === "true"
-                    ? " status-true"
-                    : notification.type_validation === "false"
-                    ? " status-false"
-                    : " status-none")
-                }
-              >
-                {notification.type_validation === "not_yet"
-                  ? "Validasi"
-                  : notification.type_validation === "true"
-                  ? "Valid"
-                  : "Tidak Valid"}
-              </label>
-            </div>
           </div>
           <div className="d-flex align-items-end gap-2">
             <Icon className="icon" icon="mdi:cctv" />
