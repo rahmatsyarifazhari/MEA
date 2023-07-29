@@ -4,13 +4,27 @@ import { useState, useEffect } from "react";
 import socketIOClient from "socket.io-client";
 
 const LiveMonitoring = ({ setPage }) => {
-  const [currentCctv, setCurrentCctv] = useState();
+  const [currentCctv, setCurrentCctv] = useState({
+    id: 1,
+    name: "GMO - Post Dumping",
+    url: "http://10.10.10.66:5000/video_feed/1",
+  });
 
-  const cctvData = [{ id: 1, name: "GMO - Post Dumping" }];
+  const cctvData = [
+    {
+      id: 1,
+      name: "GMO - Post Dumping",
+      url: "http://10.10.10.66:5000/video_feed/1",
+    },
+    {
+      id: 2,
+      name: "GMO - Post Dumping (Dummy)",
+      url: "http://10.10.10.66:5000/video_feed/2",
+    },
+  ];
 
   const [notificationData, setNotificationData] = useState([]);
 
-  //socket.io
   const socket = socketIOClient("http://10.10.10.66:5000/", {
     transports: ["polling"],
     cors: {
@@ -25,12 +39,14 @@ const LiveMonitoring = ({ setPage }) => {
     return () => {
       socket.off("message_from_server");
     };
-  }, []);
+  }, [currentCctv]);
 
   const newNotifHandler = (newNotif) => {
     newNotif.map((notification) => {
-      setNotificationData((data) => [notification, ...data]);
-      console.log(notification);
+      if (currentCctv.id === notification.id_stream) {
+        setNotificationData((data) => [notification, ...data]);
+        console.log(notification);
+      }
     });
   };
 
@@ -46,9 +62,13 @@ const LiveMonitoring = ({ setPage }) => {
     return (
       <button
         key={cctv.id}
-        className="border-0 text-start rounded-2 px-3 py-2 active"
+        className={
+          "border-0 text-start rounded-2 px-3 py-2" +
+          (currentCctv.id === cctv.id ? " active" : "")
+        }
         onClick={() => {
           setCurrentCctv(cctv);
+          setNotificationData([]);
         }}
       >
         {cctv.name}
@@ -70,7 +90,7 @@ const LiveMonitoring = ({ setPage }) => {
           </div>
           <div className="d-flex align-items-end gap-2">
             <Icon className="icon" icon="mdi:cctv" />
-            <label>{cctvData[0].name}</label>
+            <label>{cctvData[notification.id_stream - 1].name}</label>
           </div>
           <div className="d-flex align-items-end gap-2">
             <Icon className="icon" icon="akar-icons:clock" />
@@ -168,11 +188,7 @@ const LiveMonitoring = ({ setPage }) => {
                 </div>
                 <div className="content d-grid">
                   <div className="live-cctv d-flex justify-content-center align-items-center rounded-top">
-                    <img
-                      className="mw-100"
-                      src="http://10.10.10.66:5000/video_feed"
-                      alt=""
-                    />
+                    <img className="mw-100" src={currentCctv.url} alt="" />
                   </div>
                   <div className="cam-navigation mb-3 m-0 p-0 align-items-center">
                     <div className="d-flex justify-content-end gap-1">
@@ -189,7 +205,7 @@ const LiveMonitoring = ({ setPage }) => {
                   </div>
                   <div>
                     <div className="cctv-info">
-                      <h6>CCTV - Lokasi</h6>
+                      <h6>{currentCctv.name}</h6>
                     </div>
                   </div>
                 </div>
