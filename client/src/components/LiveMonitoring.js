@@ -1,227 +1,38 @@
 import "../App.css";
 import { Icon } from "@iconify/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import socketIOClient from "socket.io-client";
 
 const LiveMonitoring = ({ setPage }) => {
   const [currentCctv, setCurrentCctv] = useState();
 
-  const cctvData = [
-    { id: 2, name: "GMO - View Point 2" },
-    { id: 1, name: "CCTV - Lokasi" },
-  ];
+  const cctvData = [{ id: 1, name: "GMO - Post Dumping" }];
 
-  const notificationData = [
-    {
-      cctv_id: 2,
-      child: [],
-      comment: null,
-      created_at: "Tue, 25 Jul 2023 17:28:36 GMT",
-      id: 4527567,
-      image: "2023-07-25 17:28:36.204059_VIEWPOINT 2.jpg",
-      ip: "10.1.94.10",
-      location: "VIEWPOINT 2",
-      name: "CCTV GMO",
-      parent_id: null,
-      path: "assets/outputFolder/cctvOutput/2023-07-25/",
-      realtime_images_id: 4092642,
-      type_object: "LV",
-      type_validation: "not_yet",
-      updated_at: null,
-      user_id: null,
-      user_name: null,
-      username: null,
-      violate_count: 1,
+  const [notificationData, setNotificationData] = useState([]);
+
+  //socket.io
+  const socket = socketIOClient("http://10.10.10.66:5000/", {
+    transports: ["polling"],
+    cors: {
+      origin: "*",
     },
-    {
-      cctv_id: 2,
-      child: [],
-      comment: null,
-      created_at: "Tue, 25 Jul 2023 17:28:30 GMT",
-      id: 4527566,
-      image: "2023-07-25 17:28:30.850551_VIEWPOINT 2.jpg",
-      ip: "10.1.94.10",
-      location: "VIEWPOINT 2",
-      name: "CCTV GMO",
-      parent_id: null,
-      path: "assets/outputFolder/cctvOutput/2023-07-25/",
-      realtime_images_id: 4092641,
-      type_object: "LV",
-      type_validation: "not_yet",
-      updated_at: null,
-      user_id: null,
-      user_name: null,
-      username: null,
-      violate_count: 1,
-    },
-    {
-      cctv_id: 2,
-      child: [],
-      comment: null,
-      created_at: "Tue, 25 Jul 2023 17:28:17 GMT",
-      id: 4527562,
-      image: "2023-07-25 17:28:17.228015_VIEWPOINT 2.jpg",
-      ip: "10.1.94.10",
-      location: "VIEWPOINT 2",
-      name: "CCTV GMO",
-      parent_id: null,
-      path: "assets/outputFolder/cctvOutput/2023-07-25/",
-      realtime_images_id: 4092637,
-      type_object: "Person",
-      type_validation: "not_yet",
-      updated_at: null,
-      user_id: null,
-      user_name: null,
-      username: null,
-      violate_count: 1,
-    },
-    {
-      cctv_id: 2,
-      child: [],
-      comment: null,
-      created_at: "Tue, 25 Jul 2023 17:28:00 GMT",
-      id: 4527556,
-      image: "2023-07-25 17:28:00.373410_VIEWPOINT 2.jpg",
-      ip: "10.1.94.10",
-      location: "VIEWPOINT 2",
-      name: "CCTV GMO",
-      parent_id: null,
-      path: "assets/outputFolder/cctvOutput/2023-07-25/",
-      realtime_images_id: 4092631,
-      type_object: "Person",
-      type_validation: "not_yet",
-      updated_at: null,
-      user_id: null,
-      user_name: null,
-      username: null,
-      violate_count: 1,
-    },
-    {
-      cctv_id: 2,
-      child: [],
-      comment: null,
-      created_at: "Tue, 25 Jul 2023 17:27:56 GMT",
-      id: 4527554,
-      image: "2023-07-25 17:27:56.706188_VIEWPOINT 2.jpg",
-      ip: "10.1.94.10",
-      location: "VIEWPOINT 2",
-      name: "CCTV GMO",
-      parent_id: null,
-      path: "assets/outputFolder/cctvOutput/2023-07-25/",
-      realtime_images_id: 4092629,
-      type_object: "Person",
-      type_validation: "not_yet",
-      updated_at: null,
-      user_id: null,
-      user_name: null,
-      username: null,
-      violate_count: 1,
-    },
-    {
-      cctv_id: 2,
-      child: [],
-      comment: null,
-      created_at: "Tue, 25 Jul 2023 17:27:54 GMT",
-      id: 4527553,
-      image: "2023-07-25 17:27:54.664132_VIEWPOINT 2.jpg",
-      ip: "10.1.94.10",
-      location: "VIEWPOINT 2",
-      name: "CCTV GMO",
-      parent_id: null,
-      path: "assets/outputFolder/cctvOutput/2023-07-25/",
-      realtime_images_id: 4092628,
-      type_object: "Person",
-      type_validation: "not_yet",
-      updated_at: null,
-      user_id: null,
-      user_name: null,
-      username: null,
-      violate_count: 1,
-    },
-    {
-      cctv_id: 2,
-      child: [],
-      comment: null,
-      created_at: "Tue, 25 Jul 2023 17:27:47 GMT",
-      id: 4527547,
-      image: "2023-07-25 17:27:47.020221_VIEWPOINT 2.jpg",
-      ip: "10.1.94.10",
-      location: "VIEWPOINT 2",
-      name: "CCTV GMO",
-      parent_id: null,
-      path: "assets/outputFolder/cctvOutput/2023-07-25/",
-      realtime_images_id: 4092622,
-      type_object: "Person",
-      type_validation: "not_yet",
-      updated_at: null,
-      user_id: null,
-      user_name: null,
-      username: null,
-      violate_count: 1,
-    },
-    {
-      cctv_id: 2,
-      child: [],
-      comment: null,
-      created_at: "Tue, 25 Jul 2023 17:27:44 GMT",
-      id: 4527546,
-      image: "2023-07-25 17:27:44.398064_VIEWPOINT 2.jpg",
-      ip: "10.1.94.10",
-      location: "VIEWPOINT 2",
-      name: "CCTV GMO",
-      parent_id: null,
-      path: "assets/outputFolder/cctvOutput/2023-07-25/",
-      realtime_images_id: 4092621,
-      type_object: "Person",
-      type_validation: "not_yet",
-      updated_at: null,
-      user_id: null,
-      user_name: null,
-      username: null,
-      violate_count: 1,
-    },
-    {
-      cctv_id: 2,
-      child: [],
-      comment: null,
-      created_at: "Tue, 25 Jul 2023 17:27:27 GMT",
-      id: 4527544,
-      image: "2023-07-25 17:27:27.083237_VIEWPOINT 2.jpg",
-      ip: "10.1.94.10",
-      location: "VIEWPOINT 2",
-      name: "CCTV GMO",
-      parent_id: null,
-      path: "assets/outputFolder/cctvOutput/2023-07-25/",
-      realtime_images_id: 4092619,
-      type_object: "Person",
-      type_validation: "not_yet",
-      updated_at: null,
-      user_id: null,
-      user_name: null,
-      username: null,
-      violate_count: 1,
-    },
-    {
-      cctv_id: 2,
-      child: [],
-      comment: null,
-      created_at: "Tue, 25 Jul 2023 17:27:22 GMT",
-      id: 4527541,
-      image: "2023-07-25 17:27:22.895883_VIEWPOINT 2.jpg",
-      ip: "10.1.94.10",
-      location: "VIEWPOINT 2",
-      name: "CCTV GMO",
-      parent_id: null,
-      path: "assets/outputFolder/cctvOutput/2023-07-25/",
-      realtime_images_id: 4092616,
-      type_object: "Person",
-      type_validation: "not_yet",
-      updated_at: null,
-      user_id: null,
-      user_name: null,
-      username: null,
-      violate_count: 2,
-    },
-  ];
+  });
+
+  useEffect(() => {
+    socket.on("message_from_server", (data) => newNotifHandler(data));
+    console.log(socket);
+
+    return () => {
+      socket.off("message_from_server");
+    };
+  }, []);
+
+  const newNotifHandler = (newNotif) => {
+    newNotif.map((notification) => {
+      setNotificationData((data) => [notification, ...data]);
+      console.log(notification);
+    });
+  };
 
   const fullscreenHandler = (event) => {
     if (event === "realtime-cctv") {
@@ -235,10 +46,7 @@ const LiveMonitoring = ({ setPage }) => {
     return (
       <button
         key={cctv.id}
-        className={
-          "border-0 text-start rounded-2 px-3 py-2" +
-          (currentCctv?.id === cctv.id ? " active" : "")
-        }
+        className="border-0 text-start rounded-2 px-3 py-2 active"
         onClick={() => {
           setCurrentCctv(cctv);
         }}
@@ -262,11 +70,14 @@ const LiveMonitoring = ({ setPage }) => {
           </div>
           <div className="d-flex align-items-end gap-2">
             <Icon className="icon" icon="mdi:cctv" />
-            <label>{notification.name + " - " + notification.location}</label>
+            <label>{cctvData[0].name}</label>
           </div>
           <div className="d-flex align-items-end gap-2">
             <Icon className="icon" icon="akar-icons:clock" />
-            <label>{notification.created_at.substring(4, 25)}</label>
+            <label>{notification.time}</label>
+          </div>
+          <div className="d-flex align-items-end gap-2">
+            <label>{"Count: " + notification.count}</label>
           </div>
         </button>
       </div>
@@ -359,10 +170,7 @@ const LiveMonitoring = ({ setPage }) => {
                   <div className="live-cctv d-flex justify-content-center align-items-center rounded-top">
                     <img
                       className="mw-100"
-                      src={
-                        "http://10.10.10.66:5002/api/video_feed/" +
-                        currentCctv?.id
-                      }
+                      src="http://10.10.10.66:5000/video_feed"
                       alt=""
                     />
                   </div>
